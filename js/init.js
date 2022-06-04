@@ -139,7 +139,7 @@
 
    $('form#contactForm button.submit').click(function() {
 
-      $('#image-loader').fadeIn();
+      // $('#image-loader').fadeIn();
 
       var contactName = $('#contactForm #contactName').val();
       var contactEmail = $('#contactForm #contactEmail').val();
@@ -149,30 +149,27 @@
       var data = 'contactName=' + contactName + '&contactEmail=' + contactEmail +
                '&contactSubject=' + contactSubject + '&contactMessage=' + contactMessage;
 
-      $.ajax({
+      Email.send({
+            // SecureToken:"8b9db560-e763-4c1b-a09f-f5a5dbd21b49",
+            Host : "smtp.elasticemail.com",
+            Username : "jaysanodiyaport@gmail.com",
+            Password : "B50C78FA8A92317056D3988C45CE1E778BE2",
+            To: 'jay.sanodiya09@gmail.com',
+            From: contactEmail,
+            Subject: "New message on Portfolio "+contactName,
+            Body: data
+         }).then(
+            message =>{
+               if(message=='OK'){
+                  alert('Your mail has been send. Thank you for connecting.');
+               }
+               else{
+                  alert('There is error at sending message. ');
+                  console.error (message);
+               }
 
-	      type: "POST",
-	      url: "inc/sendEmail.php",
-	      data: data,
-	      success: function(msg) {
-
-            // Message was sent
-            if (msg == 'OK') {
-               $('#image-loader').fadeOut();
-               $('#message-warning').hide();
-               $('#contactForm').fadeOut();
-               $('#message-success').fadeIn();   
             }
-            // There was an error
-            else {
-               $('#image-loader').fadeOut();
-               $('#message-warning').html(msg);
-	            $('#message-warning').fadeIn();
-            }
-
-	      }
-
-      });
+         );
       return false;
    });
 
